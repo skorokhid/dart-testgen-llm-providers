@@ -190,6 +190,10 @@ class TestGenerator {
           continue;
         }
 
+        if (errorMessage.contains('api key not valid')) {
+          rethrow;
+        }
+
         _logger.warning('Error encountered: $errorMessage');
         prompt = promptGenerator.fixError(errorMessage);
       }
