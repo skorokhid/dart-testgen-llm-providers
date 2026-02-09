@@ -353,5 +353,19 @@ Future<void> main(List<String> arguments) async {
   }
 
   await testGenerator.dispose();
+
+  // For deleting generated coverage_import_test file
+  final coverageFile = File(
+    path.joinAll([flags.package, ...coverageImportFilePath]),
+  );
+
+  if (await coverageFile.exists()) {
+    try {
+      await coverageFile.delete();
+      _logger.info('Coverage file deleted successfully');
+    } catch (e) {
+      _logger.warning('Failed to delete the coverage file: $e');
+    }
+  }
   exit(0);
 }
