@@ -27,6 +27,20 @@ ArgParser _createArgParser() => ArgParser()
     help: 'Limit test generation to specific dart files inside the package.',
     valueHelp: 'lib/foo.dart,lib/src/temp.dart',
   )
+  ..addMultiOption(
+    'helper-tests',
+    defaultsTo: [],
+    help:
+        'Paths to existing test files inside the package to be used as '
+        'few-shot examples for the LLM. Paths relative to the package root',
+    valueHelp: 'test/foo_test.dart',
+  )
+  ..addMultiOption(
+    'target-declarations',
+    defaultsTo: [],
+    help: 'Limit test generation to specific declaration names.',
+    valueHelp: 'functionName, variableName, className',
+  )
   ..addOption(
     'port',
     defaultsTo: '0',
@@ -93,6 +107,8 @@ class Flags {
   const Flags({
     required this.package,
     required this.targetFiles,
+    required this.helperTestPaths,
+    required this.targetDeclarations,
     required this.vmServicePort,
     required this.branchCoverage,
     required this.functionCoverage,
@@ -107,6 +123,8 @@ class Flags {
 
   final String package;
   final List<String> targetFiles;
+  final List<String> helperTestPaths;
+  final List<String> targetDeclarations;
   final String vmServicePort;
   final bool branchCoverage;
   final bool functionCoverage;
@@ -164,17 +182,40 @@ ${parser.usage}
     );
   }
 
-  final libDir = path.join(packageDir, 'lib');
-  final targetFiles = (results['target-files'] as List<String>).map((file) {
-    final fullPath = path.normalize(path.join(packageDir, file));
+  List<String> resolveAndValidatePaths(
+    List<String> inputs,
+    String expectedDir,
+    String errorMessage,
+  ) {
+    return inputs.map((file) {
+      final fullPath = path.normalize(path.join(packageDir, file));
 
-    if (!file.endsWith('.dart') ||
-        !path.isWithin(libDir, fullPath) ||
-        !FileSystemEntity.isFileSync(fullPath)) {
-      fail('target-files must contain dart files exist inside lib directory');
-    }
-    return fullPath;
-  }).toList();
+      if (!file.endsWith('.dart') ||
+          !path.isWithin(expectedDir, fullPath) ||
+          !FileSystemEntity.isFileSync(fullPath)) {
+        fail(errorMessage);
+      }
+      return fullPath;
+    }).toList();
+  }
+
+  final libDir = path.join(packageDir, 'lib');
+  final targetFiles = resolveAndValidatePaths(
+    results['target-files'] as List<String>,
+    libDir,
+    'target-files must be paths to Dart files inside the lib directory. '
+    'Paths must be relative to the project root. '
+    'Example: lib/foo.dart',
+  );
+
+  final testDir = path.join(packageDir, 'test');
+  final helperTestPaths = resolveAndValidatePaths(
+    results['helper-tests'] as List<String>,
+    testDir,
+    'helper-tests must be paths to Dart files inside the test directory. '
+    'Paths must be relative to the project root. '
+    'Example: test/foo_test.dart',
+  );
 
   final scopes = results['scope-output'].isEmpty
       ? getAllWorkspaceNames(packageDir)
@@ -197,6 +238,8 @@ ${parser.usage}
   return Flags(
     package: packageDir,
     targetFiles: targetFiles,
+    helperTestPaths: helperTestPaths,
+    targetDeclarations: results['target-declarations'] as List<String>,
     vmServicePort: results['port'],
     branchCoverage: results['branch-coverage'],
     functionCoverage: results['function-coverage'],
@@ -260,6 +303,7 @@ Future<void> main(List<String> arguments) async {
   final declarations = await extractDeclarations(
     flags.package,
     targetFiles: flags.targetFiles,
+    targetDeclarations: flags.targetDeclarations,
   );
 
   final Map<String, List<Declaration>> declarationsByFile = {};
@@ -273,11 +317,16 @@ Future<void> main(List<String> arguments) async {
   );
 
   final model = GeminiModel(modelName: flags.model, apiKey: flags.apiKey);
+  final helperTestsCodes = flags.helperTestPaths
+      .map((p) => File(p).readAsStringSync())
+      .toList();
+
   final testGenerator = TestGenerator(
     model: model,
     packagePath: flags.package,
     maxRetries: flags.maxAttempts,
     verbose: flags.verbose,
+    helperTestsCode: helperTestsCodes,
   );
 
   final skippedOrFailedDeclarations = HashSet<int>();
