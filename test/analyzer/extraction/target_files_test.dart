@@ -23,12 +23,12 @@ void main() {
           .whereType<File>()
           .where((file) => file.path.endsWith('.dart'))
           .map((file) {
-            return config?.toPackageUri(file.absolute.uri).toString();
+            return config?.toPackageUri(file.absolute.uri)?.toString();
           })
           .where((uri) => uri != null)
           .toSet();
 
-      expect(expectedFiles, actualFiles);
+      expect(expectedFiles, actualFiles); 
     });
 
     test('Test extraction for target files inside the package', () async {
