@@ -1,16 +1,15 @@
 import 'dart:io';
-
+import 'package:test_gen_ai/src/LLM/llm_provider.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
-import 'package:test_gen_ai/src/LLM/model.dart';
 import 'package:test_gen_ai/src/LLM/test_generator.dart';
 import 'package:test_gen_ai/src/LLM/validator.dart';
 
 @GenerateNiceMocks([
-  MockSpec<GeminiModel>(),
-  MockSpec<GeminiChat>(),
+  MockSpec<LLMProvider>(),
+  MockSpec<LLMChat>(),
   MockSpec<AnalysisValidator>(),
   MockSpec<TestExecutionValidator>(),
   MockSpec<FormatValidator>(),
@@ -20,16 +19,16 @@ import 'test_generator_test.mocks.dart';
 void main() {
   final tmpDir = path.absolute(path.join('test', 'tmp'));
 
-  late MockGeminiModel mockModel;
-  late MockGeminiChat mockChat;
+  late MockLLMProvider mockModel;
+  late MockLLMChat mockChat;
   late MockAnalysisValidator mockAnalysisValidator;
   late MockTestExecutionValidator mockTestExecutionValidator;
   late MockFormatValidator mockFormatValidator;
   late TestGenerator generator;
 
   setUp(() {
-    mockModel = MockGeminiModel();
-    mockChat = MockGeminiChat();
+    mockModel = MockLLMProvider();
+    mockChat = MockLLMChat();
     mockAnalysisValidator = MockAnalysisValidator();
     mockTestExecutionValidator = MockTestExecutionValidator();
     mockFormatValidator = MockFormatValidator();

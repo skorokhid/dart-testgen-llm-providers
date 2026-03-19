@@ -140,10 +140,7 @@ void main() {
         expect(result, isNotNull);
         expect(result, contains('Expected: false'));
         expect(result, contains('Actual: <true>'));
-        expect(
-          result,
-          contains('test/testgen/failing_test.dart 7:9  main.<fn>'),
-        );
+        expect(result, contains('failing_test.dart 7:9  main.<fn>'));
         expect(testFile.testErrors, equals(1));
 
         await testFile.runTest();

@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
-import 'package:test_gen_ai/src/LLM/model.dart';
+import 'package:test_gen_ai/src/LLM/llm_provider.dart';
 import 'package:test_gen_ai/src/LLM/prompt_generator.dart';
 import 'package:test_gen_ai/src/LLM/test_file.dart';
 import 'package:test_gen_ai/src/LLM/validator.dart';
@@ -78,7 +78,7 @@ class TestGenerator {
     }
   }
 
-  final GeminiModel model;
+  final LLMProvider model;
   final String packagePath;
   final PromptGenerator promptGenerator;
   final List<Validator> validators;

@@ -1,4 +1,5 @@
 import 'package:test_gen_ai/test_gen_ai.dart';
+import 'package:test_gen_ai/src/LLM/gemini_provider.dart';
 
 Future<void> main() async {
   // change the packagePath and scopeOutput to your package
@@ -24,7 +25,7 @@ Future<void> main() async {
     coverageByFile,
   );
 
-  final model = GeminiModel(modelName: modelName);
+  final model = GeminiProvider(modelName: modelName);
   final testGenerator = TestGenerator(model: model, packagePath: packagePath);
 
   for (final (declaration, lines) in untestedDeclarations) {

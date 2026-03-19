@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
-
+import 'package:test_gen_ai/src/LLM/llm_provider.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:logging/logging.dart';
 
@@ -109,42 +108,42 @@ class GeminiChat {
   /// Sends a new message to the model and returns the parsed [ChatResponse].
   Future<ChatResponse> sendMessage(String content) async {
     final response = await _chat.sendMessage(Content.text(content));
-    return ChatResponse.fromText(response);
+    return ChatResponse.fromJson(response.text ?? '');
   }
 }
 
 /// Represents a parsed response from Gemini model chat.
 ///
 /// Contains the generated Dart test [code] and a boolean [needTesting] that
-/// indicates whether the model determined the input actually requires tests.
-class ChatResponse {
-  ChatResponse({required this.code, required this.needTesting});
+// /// indicates whether the model determined the input actually requires tests.
+// class ChatResponse {
+//   ChatResponse({required this.code, required this.needTesting});
 
-  final String code;
-  final bool needTesting;
+//   final String code;
+//   final bool needTesting;
 
-  /// Parses a JSON text response from the model into a [ChatResponse].
-  ///
-  /// Throws [FormatException] if the response contains no text or if the
-  /// text cannot be parsed as the expected JSON schema.
-  factory ChatResponse.fromText(GenerateContentResponse response) {
-    if (response.text == null) {
-      throw FormatException(
-        'Model returned no text in GenerateContentResponse.',
-      );
-    }
+//   /// Parses a JSON text response from the model into a [ChatResponse].
+//   ///
+//   /// Throws [FormatException] if the response contains no text or if the
+//   /// text cannot be parsed as the expected JSON schema.
+//   factory ChatResponse.fromText(GenerateContentResponse response) {
+//     if (response.text == null) {
+//       throw FormatException(
+//         'Model returned no text in GenerateContentResponse.',
+//       );
+//     }
 
-    try {
-      final json = jsonDecode(response.text!) as Map<String, dynamic>;
+//     try {
+//       final json = jsonDecode(response.text!) as Map<String, dynamic>;
 
-      return ChatResponse(
-        code: json['code'] as String,
-        needTesting: json['needTesting'] as bool,
-      );
-    } catch (e) {
-      throw FormatException(
-        'Failed to parse model response as JSON: ${response.text}',
-      );
-    }
-  }
-}
+//       return ChatResponse(
+//         code: json['code'] as String,
+//         needTesting: json['needTesting'] as bool,
+//       );
+//     } catch (e) {
+//       throw FormatException(
+//         'Failed to parse model response as JSON: ${response.text}',
+//       );
+//     }
+//   }
+// }

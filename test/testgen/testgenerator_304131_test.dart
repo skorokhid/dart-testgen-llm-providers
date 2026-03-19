@@ -1,14 +1,13 @@
 // LLM-Generated test file created by testgen
-
+import 'package:test_gen_ai/src/LLM/llm_provider.dart';
 import 'dart:io';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:path/path.dart' as path;
 import 'package:test_gen_ai/src/LLM/test_generator.dart';
 import 'package:test_gen_ai/src/LLM/validator.dart';
-import 'package:test_gen_ai/src/LLM/model.dart';
 
-class MockModel extends Mock implements GeminiModel {}
+class MockModel extends Mock implements LLMProvider {}
 
 void main() {
   group('TestGenerator Constructor', () {

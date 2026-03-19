@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:test_gen_ai/src/LLM/context_generator.dart';
-import 'package:test_gen_ai/src/LLM/model.dart';
+import 'package:test_gen_ai/src/LLM/gemini_provider.dart';
 import 'package:test_gen_ai/src/LLM/test_generator.dart';
 import 'package:test_gen_ai/src/analyzer/declaration.dart';
 import 'package:test_gen_ai/src/analyzer/extractor.dart';
@@ -230,7 +230,7 @@ void main() async {
 
     for (final model in models) {
       for (final contextDepth in contextDepths) {
-        final geminiModel = GeminiModel(modelName: model, apiKey: apiKey);
+        final geminiModel = GeminiProvider(modelName: model, apiKey: apiKey);
         final testGenerator = TestGenerator(
           model: geminiModel,
           packagePath: packagePath,

@@ -5,7 +5,8 @@ import 'package:args/args.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 import 'package:test_gen_ai/src/LLM/context_generator.dart';
-import 'package:test_gen_ai/src/LLM/model.dart';
+import 'package:test_gen_ai/src/LLM/gemini_provider.dart';
+import 'package:test_gen_ai/src/LLM/llm_provider.dart';
 import 'package:test_gen_ai/src/LLM/test_generator.dart';
 import 'package:test_gen_ai/src/analyzer/declaration.dart';
 import 'package:test_gen_ai/src/analyzer/extractor.dart';
@@ -316,7 +317,10 @@ Future<void> main(List<String> arguments) async {
     coverageByFile,
   );
 
-  final model = GeminiModel(modelName: flags.model, apiKey: flags.apiKey);
+  final LLMProvider model = GeminiProvider(
+    modelName: flags.model,
+    apiKey: flags.apiKey,
+  );
   final helperTestsCodes = flags.helperTestPaths
       .map((p) => File(p).readAsStringSync())
       .toList();
