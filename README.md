@@ -15,6 +15,28 @@ TestGen AI is an LLM-based test generation tool that generates Dart test cases f
 
 ## Getting Started
 
+## LLM Providers
+
+TestGen now supports multiple LLM providers via the `--provider` flag.
+
+### Gemini (default)
+```bash
+export GEMINI_API_KEY=your_key
+dart pub global run test_gen_ai:testgen --provider gemini
+```
+
+### OpenAI (ChatGPT)
+```bash
+export OPENAI_API_KEY=your_key
+dart pub global run test_gen_ai:testgen --provider openai --model gpt-4o-mini
+```
+
+### Anthropic (Claude)
+```bash
+export ANTHROPIC_API_KEY=your_key
+dart pub global run test_gen_ai:testgen --provider claude --model claude-sonnet-4-6
+```
+
 ### Install test_gen_ai
 
 ```dart
@@ -62,6 +84,7 @@ dart pub global run test_gen_ai:testgen --package '/home/user/code' --target-fil
 | `--helper-tests` | | `[]` | Paths to existing test files used as few-shot examples for the LLM (paths relative to package root, e.g. `test/foo_test.dart`) |
 | `--target-declarations` | | `[]` | Limit test generation to specific declaration names (comma-separated, e.g. `functionName,variableName,className`) |
 | `--model` | | `gemini-3-flash-preview` | Gemini model to use (`gemini-3-flash-preview`, `gemini-2.5-flash`, `gemini-2.5-flash-lite`) |
+`--provider` | `gemini` | LLM provider to use (`gemini`, `openai`, `claude`)
 | `--api-key` | | `$GEMINI_API_KEY` | Gemini API key for authentication |
 | `--effective-tests-only` | `-e` | `false` | Only generate tests that actually improve coverage |
 | `--scope-output` | | `[]` | Restrict coverage to specific package paths |
