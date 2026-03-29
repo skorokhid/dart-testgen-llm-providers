@@ -44,7 +44,7 @@ void main() {
 
       final actualFiles = decls.map((d) => d.path).toSet();
       final expectedFiles = targetFiles.map((file) {
-        return config?.toPackageUri(File(file).absolute.uri).toString();
+        return config?.toPackageUri(File(file).absolute.uri)?.toString();
       }).toSet();
 
       expect(expectedFiles, hasLength(2));
