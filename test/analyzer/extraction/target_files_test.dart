@@ -12,6 +12,16 @@ void main() {
     path.absolute(path.joinAll(testPackagePath)),
   );
 
+  setUpAll(() async {
+    final result = await Process.run('dart', [
+      'pub',
+      'get',
+    ], workingDirectory: testPackage);
+    if (result.exitCode != 0) {
+      throw Exception('dart pub get failed: ${result.stderr}');
+    }
+  });
+
   group('Test declarations extraction', () {
     test('Test extraction from all files inside the package', () async {
       final config = await findPackageConfig(Directory(testPackage));
