@@ -1,3 +1,4 @@
+import 'package:test_gen_ai/src/LLM/claude_provider.dart';
 import 'package:test_gen_ai/src/LLM/openai_provider.dart';
 import 'dart:collection';
 import 'dart:io';
@@ -331,6 +332,12 @@ Future<void> main(List<String> arguments) async {
     'openai' => OpenAIProvider(
       modelName: flags.model == 'gemini-3-flash-preview'
           ? 'gpt-4o-mini'
+          : flags.model,
+      apiKey: flags.apiKey,
+    ),
+    'claude' => ClaudeProvider(
+      modelName: flags.model == 'gemini-3-flash-preview'
+          ? 'claude-sonnet-4-6'
           : flags.model,
       apiKey: flags.apiKey,
     ),
