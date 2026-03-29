@@ -79,9 +79,7 @@ ArgParser _createArgParser() => ArgParser()
     'provider',
     defaultsTo: 'gemini',
     help: 'LLM provider to use (gemini, openai, claude).',
-    allowed: ['gemini', 'openai', 'claugit add README.md
-git commit -m "docs: add multi-provider documentation to README (Etap 5)"
-git push myfork mainde'],
+    allowed: ['gemini', 'openai', 'claude'],
   )
   ..addOption(
     'api-key',
