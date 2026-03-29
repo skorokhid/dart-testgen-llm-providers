@@ -26,6 +26,7 @@ void main() {
             return config?.toPackageUri(file.absolute.uri)?.toString();
           })
           .where((uri) => uri != null)
+          .cast<String>()
           .toSet();
 
       expect(expectedFiles, actualFiles);
