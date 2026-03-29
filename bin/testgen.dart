@@ -1,3 +1,4 @@
+import 'package:test_gen_ai/src/LLM/openai_provider.dart';
 import 'dart:collection';
 import 'dart:io';
 
@@ -74,6 +75,12 @@ ArgParser _createArgParser() => ArgParser()
     help: 'Gemini model to use for generating tests.',
   )
   ..addOption(
+    'provider',
+    defaultsTo: 'gemini',
+    help: 'LLM provider to use (gemini, openai, claude).',
+    allowed: ['gemini', 'openai', 'claude'],
+  )
+  ..addOption(
     'api-key',
     defaultsTo: Platform.environment['GEMINI_API_KEY'],
     help: 'Gemini API key for authentication (or set GEMINI_API_KEY env var).',
@@ -115,6 +122,7 @@ class Flags {
     required this.functionCoverage,
     required this.scopeOutput,
     required this.model,
+    required this.provider,
     required this.apiKey,
     required this.effectiveTestsOnly,
     required this.maxDepth,
@@ -126,6 +134,7 @@ class Flags {
   final List<String> targetFiles;
   final List<String> helperTestPaths;
   final List<String> targetDeclarations;
+  final String provider;
   final String vmServicePort;
   final bool branchCoverage;
   final bool functionCoverage;
@@ -246,6 +255,7 @@ ${parser.usage}
     functionCoverage: results['function-coverage'],
     scopeOutput: scopes.toSet(),
     model: results['model'] as String,
+    provider: results['provider'] as String,
     apiKey: results['api-key'] as String,
     effectiveTestsOnly: results['effective-tests-only'] as bool,
     maxDepth: int.parse(results['max-depth'] as String),
@@ -317,10 +327,15 @@ Future<void> main(List<String> arguments) async {
     coverageByFile,
   );
 
-  final LLMProvider model = GeminiProvider(
-    modelName: flags.model,
-    apiKey: flags.apiKey,
-  );
+  final LLMProvider model = switch (flags.provider) {
+    'openai' => OpenAIProvider(
+      modelName: flags.model == 'gemini-3-flash-preview'
+          ? 'gpt-4o-mini'
+          : flags.model,
+      apiKey: flags.apiKey,
+    ),
+    _ => GeminiProvider(modelName: flags.model, apiKey: flags.apiKey),
+  };
   final helperTestsCodes = flags.helperTestPaths
       .map((p) => File(p).readAsStringSync())
       .toList();
