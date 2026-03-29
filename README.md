@@ -84,7 +84,7 @@ dart pub global run test_gen_ai:testgen --package '/home/user/code' --target-fil
 | `--helper-tests` | | `[]` | Paths to existing test files used as few-shot examples for the LLM (paths relative to package root, e.g. `test/foo_test.dart`) |
 | `--target-declarations` | | `[]` | Limit test generation to specific declaration names (comma-separated, e.g. `functionName,variableName,className`) |
 | `--model` | | `gemini-3-flash-preview` | Gemini model to use (`gemini-3-flash-preview`, `gemini-2.5-flash`, `gemini-2.5-flash-lite`) |
-`--provider` | `gemini` | LLM provider to use (`gemini`, `openai`, `claude`)
+`--provider` | | `gemini` | LLM provider to use (`gemini`, `openai`, `claude`)
 | `--api-key` | | `$GEMINI_API_KEY` | Gemini API key for authentication |
 | `--effective-tests-only` | `-e` | `false` | Only generate tests that actually improve coverage |
 | `--scope-output` | | `[]` | Restrict coverage to specific package paths |
