@@ -1,50 +1,50 @@
-# TestGen LLM Providers — Звіт про виконання Issue #29
+# TestGen LLM Providers — Issue #29 Implementation Report
 
-## Посилання
-- **Оригінальний репозиторій:** https://github.com/AmrAhmed119/dart-testgen
-- **Мій репозиторій:** https://github.com/skorokhid/dart-testgen-llm-providers
+## Links
+- **Original repository:** https://github.com/AmrAhmed119/dart-testgen
+- **Fork repository:** https://github.com/skorokhid/dart-testgen-llm-providers
 - **Issue:** https://github.com/AmrAhmed119/dart-testgen/issues/29
 
 ---
 
-## Мета проєкту
+## Project Goal
 
-Розширити інструмент `dart-testgen` підтримкою альтернативних LLM-провайдерів:
-**OpenAI (ChatGPT)** та **Anthropic (Claude)**.
+Extend the `dart-testgen` tool with support for alternative LLM providers:
+**OpenAI (ChatGPT)** and **Anthropic (Claude)**.
 
-До змін інструмент був жорстко прив'язаний до Google Gemini.
+Previously the tool was tightly coupled to Google Gemini.
 
 ---
 
-## Архітектурне рішення
+## Architectural Decision
 
-Застосовано принцип **Dependency Inversion (SOLID)** — введено абстракцію
-`LLMProvider` замість прямої залежності від Gemini SDK.
+Applied **Dependency Inversion Principle (SOLID)** — introduced `LLMProvider`
+abstraction instead of direct dependency on the Gemini SDK.
 
-### Нові файли
+### New Files
 
-| Файл | Опис |
-|------|------|
-| `lib/src/LLM/llm_provider.dart` | Абстрактний клас `LLMProvider`, `LLMChat`, `ChatResponse` |
-| `lib/src/LLM/gemini_provider.dart` | Рефакторинг GeminiModel у адаптер |
-| `lib/src/LLM/openai_provider.dart` | Адаптер для OpenAI ChatGPT API |
-| `lib/src/LLM/claude_provider.dart` | Адаптер для Anthropic Claude API |
-| `test/LLM/openai_provider_test.dart` | Unit-тести для OpenAI адаптера |
-| `test/LLM/claude_provider_test.dart` | Unit-тести для Claude адаптера |
+| File | Description |
+|------|-------------|
+| `lib/src/LLM/llm_provider.dart` | Abstract classes: `LLMProvider`, `LLMChat`, `ChatResponse` |
+| `lib/src/LLM/gemini_provider.dart` | Refactored GeminiModel into an adapter |
+| `lib/src/LLM/openai_provider.dart` | OpenAI ChatGPT API adapter |
+| `lib/src/LLM/claude_provider.dart` | Anthropic Claude API adapter |
+| `test/LLM/openai_provider_test.dart` | Unit tests for OpenAI adapter |
+| `test/LLM/claude_provider_test.dart` | Unit tests for Claude adapter |
 
-### Змінені файли
+### Modified Files
 
-| Файл | Зміна |
-|------|-------|
+| File | Change |
+|------|--------|
 | `lib/src/LLM/test_generator.dart` | `GeminiModel` → `LLMProvider` (DIP) |
-| `bin/testgen.dart` | Додано `--provider` CLI прапор |
-| `README.md` | Документація нових провайдерів |
+| `bin/testgen.dart` | Added `--provider` CLI flag |
+| `README.md` | Documentation for new providers |
 
 ---
 
-## CLI використання
+## CLI Usage
 ```bash
-# Gemini (за замовчуванням)
+# Gemini (default)
 dart run bin/testgen.dart --provider gemini --api-key $GEMINI_API_KEY
 
 # OpenAI
@@ -56,31 +56,31 @@ dart run bin/testgen.dart --provider claude --model claude-sonnet-4-6 --api-key 
 
 ---
 
-## Результати тестування
+## Test Results
 
-| Провайдер | Статус | Деталі |
-|-----------|--------|--------|
-| Gemini | ✅ Повністю працює | Оригінальна функціональність збережена |
-| OpenAI | ✅ API підключення підтверджено | Rate limit на безкоштовному tier |
-| Claude | ✅ API підключення підтверджено | Потребує балансу на акаунті |
+| Provider | Status | Details |
+|----------|--------|---------|
+| Gemini | ✅ Fully working | Original functionality preserved |
+| OpenAI | ✅ API connection verified | Rate limit on free tier |
+| Claude | ✅ API connection verified | Requires account balance |
 
-### Тести
-- **До змін:** 164/164 тестів проходять
-- **Після змін:** 173/173 тестів проходять (+9 нових)
-- **CI:** GitHub Actions — всі тести зелені
-
----
-
-## Виправлені баги оригінального репозиторію
-
-1. **Windows `\r\n` переноси рядків** — `git config core.autocrlf false`
-2. **Null URI у `target_files_test.dart`** — додано `?.toString()` та `.cast<String>()`
-3. **`dart pub get` на CI** — додано `setUpAll` для ініціалізації тестового пакету
+### Test Suite
+- **Before changes:** 164/164 tests pass
+- **After changes:** 173/173 tests pass (+9 new tests)
+- **CI:** GitHub Actions — all tests green
 
 ---
 
-## Висновок
+## Bug Fixes in Original Repository
 
-Реалізовано повноцінну абстракцію `LLMProvider` що дозволяє легко додавати
-нові LLM провайдери в майбутньому. Всі три провайдери реалізують єдиний
-інтерфейс і обробляють помилки API (rate limit, invalid key, overload).
+1. **Windows `\r\n` line endings** — `git config core.autocrlf false`
+2. **Null URI in `target_files_test.dart`** — added `?.toString()` and `.cast<String>()`
+3. **Missing `dart pub get` on CI** — added `setUpAll` to initialize test package
+
+---
+
+## Conclusion
+
+Implemented a clean `LLMProvider` abstraction that makes it easy to add new
+LLM providers in the future. All three providers implement the same interface
+and handle API errors (rate limit, invalid key, overload).
