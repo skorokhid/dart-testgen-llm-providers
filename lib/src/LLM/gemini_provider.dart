@@ -3,7 +3,6 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:logging/logging.dart';
 import 'package:test_gen_ai/src/LLM/llm_provider.dart';
 
-
 class GeminiProvider implements LLMProvider {
   GeminiProvider({
     String modelName = 'gemini-3-flash-preview',
@@ -93,7 +92,6 @@ class GeminiProvider implements LLMProvider {
         .catchError((_) => 0);
   }
 }
-
 
 class GeminiChat implements LLMChat {
   GeminiChat(this._chat);

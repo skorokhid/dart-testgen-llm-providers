@@ -111,4 +111,3 @@ class GeminiChat {
     return ChatResponse.fromJson(response.text ?? '');
   }
 }
-

@@ -50,7 +50,6 @@ class OpenAIProvider implements LLMProvider {
   }
 }
 
-
 class OpenAIChat implements LLMChat {
   OpenAIChat({
     required String modelName,

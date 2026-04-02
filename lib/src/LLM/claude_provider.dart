@@ -54,7 +54,6 @@ class ClaudeProvider implements LLMProvider {
   }
 }
 
-
 class ClaudeChat implements LLMChat {
   ClaudeChat({
     required String modelName,
