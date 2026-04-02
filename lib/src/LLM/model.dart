@@ -112,38 +112,3 @@ class GeminiChat {
   }
 }
 
-/// Represents a parsed response from Gemini model chat.
-///
-/// Contains the generated Dart test [code] and a boolean [needTesting] that
-// /// indicates whether the model determined the input actually requires tests.
-// class ChatResponse {
-//   ChatResponse({required this.code, required this.needTesting});
-
-//   final String code;
-//   final bool needTesting;
-
-//   /// Parses a JSON text response from the model into a [ChatResponse].
-//   ///
-//   /// Throws [FormatException] if the response contains no text or if the
-//   /// text cannot be parsed as the expected JSON schema.
-//   factory ChatResponse.fromText(GenerateContentResponse response) {
-//     if (response.text == null) {
-//       throw FormatException(
-//         'Model returned no text in GenerateContentResponse.',
-//       );
-//     }
-
-//     try {
-//       final json = jsonDecode(response.text!) as Map<String, dynamic>;
-
-//       return ChatResponse(
-//         code: json['code'] as String,
-//         needTesting: json['needTesting'] as bool,
-//       );
-//     } catch (e) {
-//       throw FormatException(
-//         'Failed to parse model response as JSON: ${response.text}',
-//       );
-//     }
-//   }
-// }

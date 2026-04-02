@@ -3,10 +3,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:logging/logging.dart';
 import 'package:test_gen_ai/src/LLM/llm_provider.dart';
 
-/// Реалізація [LLMProvider] для Google Gemini API.
-///
-/// Використовує офіційний пакет [google_generative_ai].
-/// Підтримує моделі: gemini-3-flash-preview, gemini-2.5-flash тощо.
+
 class GeminiProvider implements LLMProvider {
   GeminiProvider({
     String modelName = 'gemini-3-flash-preview',
@@ -97,7 +94,7 @@ class GeminiProvider implements LLMProvider {
   }
 }
 
-/// Реалізація [LLMChat] для Gemini чат-сесії.
+
 class GeminiChat implements LLMChat {
   GeminiChat(this._chat);
 

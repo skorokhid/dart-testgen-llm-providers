@@ -5,10 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:test_gen_ai/src/LLM/llm_provider.dart';
 
-/// Реалізація [LLMProvider] для Anthropic Claude API.
-///
-/// Використовує REST API endpoint: POST /v1/messages
-/// Документація: https://docs.anthropic.com/en/api/messages
 class ClaudeProvider implements LLMProvider {
   ClaudeProvider({
     String modelName = 'claude-sonnet-4-6',
@@ -58,7 +54,7 @@ class ClaudeProvider implements LLMProvider {
   }
 }
 
-/// Реалізація [LLMChat] для Claude — зберігає історію розмови.
+
 class ClaudeChat implements LLMChat {
   ClaudeChat({
     required String modelName,

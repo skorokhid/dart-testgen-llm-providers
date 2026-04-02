@@ -5,10 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:test_gen_ai/src/LLM/llm_provider.dart';
 
-/// Реалізація [LLMProvider] для OpenAI ChatGPT API.
-///
-/// Використовує REST API endpoint: POST /v1/chat/completions
-/// Документація: https://platform.openai.com/docs/api-reference/chat
 class OpenAIProvider implements LLMProvider {
   OpenAIProvider({
     String modelName = 'gpt-4o-mini',
@@ -54,7 +50,7 @@ class OpenAIProvider implements LLMProvider {
   }
 }
 
-/// Реалізація [LLMChat] для OpenAI — зберігає історію розмови.
+
 class OpenAIChat implements LLMChat {
   OpenAIChat({
     required String modelName,
